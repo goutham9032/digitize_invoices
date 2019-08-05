@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'navbar.html'%}
+    {% if not request.user.is_superuser %}
+		<div class="row justify-content-center">
+		   <form method="POST" enctype="multipart/form-data" class="form-horizontal" id="file_upload_form">
+				{% csrf_token %}
+				<h2 align="center" class="page_title">Digitize Invoices</h2>
+				<div class="form-group file_upload_div">
+						<input type="file" name="input_file" id="ip_file" required="True" class="form-control" accept=".pdf, image/*">
+						<div class="note_div">
+						   <strong>Note:</strong>
+							  Files with .pdf/image extensions only be uploaded here.
+						</div>
+						<div class="button_div">
+							<button class="btn btn-info" id="upload_file" disabled>
+									 <i class="fa fa-spinner fa-spin no_display"></i>
+									 <span class="glyphicon glyphicon-upload" style="margin-right:5px;">Upload File</span>
+							</button>
+						</div>
+				</div>
+			</form>
+		</div>
+    {% endif %}
+    {% if not invoices %}
+       <p class="no_invoice">No invoices have been found please upload invoices</p>
+    {% else %}
+		<table class="table table-borderless invoices_table">
+			<thead>
+			  <tr>
+				<th>Invoice Id</th>
+				<th>Download</th>
+				<th>Digitization status</th>
+				<th>{% if not request.user.is_superuser%} Info {% else %} change {% endif %}</th>
+			  </tr>
+			</thead>
+			<tbody>
+            {% for invoice in invoices %}
+			  <tr id="{{ invoice.slug }}">
+				<td>{{ invoice.file_name }}</td>
+				<td>
+                    <a href="{{ invoice.download_url }}" download>
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                    </a>
+                </td>
+				<td>
+                    <button class="status_btn 
+						{% if invoice.digitized %}
+                           dig_active" disabled>Success
+                        {% else %}
+                           ">Pending 
+						{% endif %}
+                    </button>
+                </td>
+				<td>
+                   {% if request.user.is_superuser %}
+                      <a href="/view/{{invoice.slug}}">{% if not invoice.digitized %} Update {% else %} view {% endif %}</a>
+                   {% elif not request.user.is_superuser and invoice.digitized  %}
+                      <a href="/view/{{invoice.slug}}">View</a>
+                   {% endif %}
+                </td>
+			  </tr>
+            {% endfor %}
+			</tbody>
+		</table>
+    {% endif %}
+{% endblock %}

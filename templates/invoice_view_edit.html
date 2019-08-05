@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'navbar.html'%}
+    <div class="container">
+         <div class="row">
+              <div class="col-sm-7">
+                  <br><br>
+                  {% if not data %}
+                     <p>You dont have enough permissions to view/edit or the endpoint is not found </>
+                  {% else %}
+
+                      <p>{{data.file_name}}</p>
+                      <div class="form-group row">
+                         <label for="staticEmail" class="col-sm-2 col-form-label">Invoice No </label>
+                         <div class="col-sm-7">
+                           <input type="text" class="form-control" 
+                                  id="invoice_no" value="{{ invoice.invoice_no}}" {% if data.digitized %}disabled{% endif %}>
+                         </div>
+                      </div>
+                      <div class="form-group row">
+                         <label for="inputPassword" class="col-sm-2 col-form-label">From</label>
+                         <div class="col-sm-7">
+                           <input type="text" class="form-control" 
+                                  id="from" value="{{ invoice.from_add }}" {% if data.digitized %}disabled{% endif %}>
+                         </div>
+                      </div>
+                      <div class="form-group row">
+                         <label for="inputPassword" class="col-sm-2 col-form-label">To</label>
+                         <div class="col-sm-7">
+                           <input type="text" class="form-control" 
+                                  id="to" value="{{ invoice.to }}" {% if data.digitized %}disabled{% endif %}>
+                         </div>
+                      </div>
+                      <div class="form-group row">
+                         <label for="inputPassword" class="col-sm-2 col-form-label">Date</label>
+                         <div class="col-sm-7">
+                           <input type="text" class="form-control" 
+                                  id="date" value="{{ invoice.date }}" {% if data.digitized %}disabled{% endif %}>
+                         </div>
+                      </div>
+                      {% if not data.digitized %}
+                          <div class="form-group row">
+                                 <button type="button" class="btn btn-success" id="digitize">Digitize Invoice</button>
+                                 <button type="button" class="btn btn-warning" id="save_update">Save/Update</button>
+                          </div>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+              
+         </div>
+    </div>
+{% endblock %}
