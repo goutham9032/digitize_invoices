@@ -97,7 +97,6 @@ def view_update_invoice(request, invoice_id):
           return render(request, "invoice_view_edit.html", {'invoice':invoice.first(), 'data':invoice_obj.first()})
        else:
           return render(request, "invoice_view_edit.html", {'data':invoice_obj.first()})
-          
     body = json.loads(request.body.decode())
     if invoice_obj:
        add_info = AddParsedInfo.objects.filter(invoice=invoice_obj.first())
